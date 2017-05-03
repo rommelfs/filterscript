@@ -29,11 +29,12 @@ window.addEventListener("load", function() {
             var found_body = false;
             for (var i=0; i < headers.length; i++) {
                 var header = headers.queryElementAt(i, Components.interfaces.nsIMsgDBHdr);
-
+                var subject = header.getStringProperty("subject");
+                subject = subject.concat("\n");
                 MsgHdrToMimeMessage(header, null, function(header, message) {
                     if (!found_body && message.coerceBodyToPlaintext) {
                         found_body = true;
-                        FilterScript.runFilter(message.coerceBodyToPlaintext());
+                        FilterScript.runFilter(subject.concat(message.coerceBodyToPlaintext()));
                     }
                 }, true);
             }
